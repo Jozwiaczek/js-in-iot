@@ -1,0 +1,17 @@
+{
+  "name": "js-in-iot-code",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "jakub.jozwiak <kubencki@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start:onoff": "node packages/onoff",
+    "start:aws": "node packages/aws"
+  },
+  "dependencies": {
+    "onoff": "^6.0.1",
+    "aws-iot-device-sdk": "^2.2.6",
+    "prettier": "^2.2.1",
+    "dotenv": "^8.2.0"
+  }
+}

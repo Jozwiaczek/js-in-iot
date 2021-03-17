@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>JS in IoT</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+    <link rel="icon" type="image/png" href="assets/js-logo.png" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme" />
+</head>
+<style>
+    .reveal h1,
+    .reveal h2,
+    .reveal h3,
+    .reveal h4,
+    .reveal h5 {
+        text-transform: none;
+    }
+</style>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <section
+                    data-auto-animate
+                    data-auto-animate-easing="cubic-bezier(0.770, 0.000, 0.175, 1.000)"
+            >
+                <div class="r-stack">
+                    <img src="assets/rpi_logo.png" style="height: 100px" />
+                    <img src="assets/aws_iot_logo.png" style="height: 100px" />
+                    <img src="assets/homebridge-logo.png" style="height: 100px" />
+                    <img src="assets/js-logo.png" style="height: 100px" />
+                </div>
+            </section>
+            <section data-auto-animate>
+                <div class="r-stack">
+                    <img src="assets/rpi_logo.png" style="height: 100px" />
+                    <img src="assets/aws_iot_logo.png" style="height: 100px" />
+                    <img src="assets/homebridge-logo.png" style="height: 100px" />
+                </div>
+                <h3>+</h3>
+                <img src="assets/js-logo.png" style="height: 100px" />
+            </section>
+            <section data-auto-animate>
+                <img src="assets/rpi_logo.png" style="height: 100px" />
+                <img src="assets/aws_iot_logo.png" style="height: 100px" />
+                <img src="assets/homebridge-logo.png" style="height: 100px" />
+                <h3>+</h3>
+                <img src="assets/js-logo.png" style="height: 100px" />
+                <h1>JavaScript in IoT</h1>
+            </section>
+            <section>
+                <h2>Agenda:</h2>
+                <div class="r-stack">
+                    <img
+                            class="fragment fade-in-then-out"
+                            src="assets/iot-iot-everywhere.jpeg"
+                            style="height: 350px"
+                    />
+                    <div class="fragment fade-in-then-out">
+                        <ol>
+                            <li>Raspberry Pi</li>
+                            <li>AWS IoT</li>
+                            <li>Homebridge</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section>
+            <section>
+                <img src="assets/rpi_logo.png" style="height: 100px" />
+                <h2>Raspberry Pi</h2>
+                Cheap micro computer that runs Linux, but it also provides a set of
+                <b>GPIO</b> pins that allow you to control electronic components.
+            </section>
+            <section>
+                <h3>Most popular micro computers</h3>
+                <br />
+                <table class="fragment">
+                    <thead>
+                    <tr>
+                        <th>Micro Computer</th>
+                        <th>Price (around)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Raspberry Pi 4</td>
+                        <td>~ 190zł</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Raspberry Pi Zero</td>
+                        <td>~ 80zł</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>Arduino</td>
+                        <td>~ 90zł</td>
+                    </tr>
+                    <tr class="fragment">
+                        <td>ESP8266</td>
+                        <td>~ 20zł</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <aside class="notes">Shhh, these are your private notes 📝</aside>
+            </section>
+            <section>
+                <h2>How it looks like</h2>
+                <br />
+                <img src="assets/rpi-model.webp" style="height: 400px" />
+            </section>
+            <section>
+                <h2>What with those GPIO?</h2>
+                <br />
+                <img src="assets/rp2_pinout.png" style="height: 400px" />
+            </section>
+            <section>
+                <h3>Types of sensors/inputs</h3>
+                <ul>
+                    <li class="fragment">Accelerometers</li>
+                    <li class="fragment">Gesture sensors</li>
+                    <li class="fragment">Fingerprint readers</li>
+                    <li class="fragment">LCD/LED screens</li>
+                    <li class="fragment">Temperature/Humidity sensors</li>
+                    <li class="fragment">Muscle sensors</li>
+                    <li class="fragment">Cameras</li>
+                    <li class="fragment">
+                        <a href="https://botland.com.pl/6-czujniki">Many many more...</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>So how to code it?</h2>
+                <a href="https://github.com/fivdi/onoff">onoff library</a>
+                <pre data-id="code">
+                <code class="javascript" data-trim data-line-numbers="1,3-4|6-10|12-18|20-26">
+                    const { Gpio } = require('onoff');
+
+                    const LIGHT_PIN = 21;
+                    const light = new Gpio(LIGHT_PIN, 'out');
+
+                    // Turn on light
+                    light.writeSync(1);
+
+                    // Turn off light
+                    light.writeSync(0);
+
+                    const BUTTON_PIN = 2;
+                    const button = new Gpio(
+                        BUTTON_PIN,
+                        'in',
+                        'rising',
+                        {debounceTimeout: 10}
+                    );
+
+                    button.watch(async (err, value) => {
+                        if (err) {
+                            throw err;
+                        }
+
+                        console.log('Button pressed!');
+                    });
+                </code>
+            </pre>
+            </section>
+            <section>
+                <h2>
+                    <a href="https://www.raspberrypi.org/documentation/linux/usage/cron.md"
+                    >Scheduling tasks</a
+                    >
+                </h2>
+                So probably You would like to run your app automatically on system reboot or with
+                specific time pattern.
+                <br />
+                <br />
+                <div class="fragment">
+                    Run in terminal:
+                    <pre data-id="code">
+                    <code data-line-numbers class="bash" data-trim>crontab -e</code>
+                </pre>
+                </div>
+                <div class="fragment">
+                    And add script at the end of file:
+                    <pre data-id="code">
+                    <code data-line-numbers class="bash" data-trim>@reboot node /home/pi/app.js &</code>
+                </pre>
+                </div>
+            </section>
+            <section>
+                <h3>And what can You really do with this micro-computer?</h3>
+                <ul>
+                    <li class="fragment">Use as Your Desktop PC</li>
+                    <li class="fragment">Security camera</li>
+                    <li class="fragment">NAS</li>
+                    <li class="fragment">WiFi extender</li>
+                    <li class="fragment"><a href="https://magicmirror.builders/">Smart mirror</a></li>
+                    <li class="fragment">
+                        <a href="https://github.com/hyperion-project/hyperion.ng/"
+                        >Ambilight System for any screen</a
+                        >
+                    </li>
+                    <li class="fragment">And again many many more...</li>
+                </ul>
+            </section>
+            <section>
+                <h3>"It works for me"</h3>
+                <div class="r-stack">
+                    <img
+                            src="assets/smart-door/smart-door-1.jpg"
+                            height="450"
+                            class="fragment fade-in-then-out"
+                    />
+                    <img
+                            style="transform: rotate(-90deg)"
+                            src="assets/smart-door/smart-door-2.jpg"
+                            height="450"
+                            class="fragment fade-in-then-out"
+                    />
+                    <img
+                            src="assets/smart-door/smart-door-3.jpg"
+                            height="450"
+                            class="fragment fade-in-then-out"
+                    />
+                    <img
+                            src="assets/smart-door/smart-door-4.jpg"
+                            height="450"
+                            class="fragment fade-in-then-out"
+                    />
+                    <img
+                            src="assets/smart-door/animated.GIF"
+                            height="450"
+                            class="fragment fade-in-then-out"
+                    />
+                    <video class="fragment fade-in-then-out" src="assets/stf.MOV" controls></video>
+                    <iframe
+                            class="fragment fade-in-then-out"
+                            width="560"
+                            height="315"
+                            src="https://www.youtube.com/embed/Yd0vRNeZa0E"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                    ></iframe>
+                </div>
+            </section>
+        </section>
+        <section>
+            <section>
+                <img src="assets/aws_iot_logo.png" style="height: 100px" />
+                <h2>AWS IoT</h2>
+                You know how to code Your device but how to <b>securely connect</b> with Your app?
+            </section>
+            <section>
+                AWS IoT provides the cloud services that connect your IoT devices to other devices and
+                AWS cloud services.
+                <img src="assets/iot-endpoints.png" style="height: 250px" />
+                <br />
+                <ul>
+                    <li class="fragment">Managing devices</li>
+                    <li class="fragment">Security</li>
+                    <li class="fragment">Monitoring</li>
+                    <li class="fragment">Over-the-air-updates</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Sounds good? Implementation is much better!</h3>
+                <a href="https://github.com/aws/aws-iot-device-sdk-js">AWS IoT Device SDK JS</a>
+                <pre>
+                <code class="hljs" style="height: 300px" data-trim data-line-numbers="1,3-9|11-15|17-21">
+                    const awsIot = require('aws-iot-device-sdk');
+
+                    const device = awsIot.device({
+                        keyPath: 'PrivateKeyPath',
+                        certPath: 'CertificatePath',
+                        caPath: 'RootCACertificatePath',
+                        clientId: 'UniqueClientIdentifier',
+                        host: 'IoTCoreEndpoint'
+                    });
+
+                    device.on('connect', () => {
+                        console.log('connected');
+                        device.publish('connected', JSON.stringify({ message: 'connected' }));
+                        device.subscribe('turnOn');
+                    });
+
+                    device.on('message', (topic) => {
+                        if (topic === 'turnOn') {
+                            console.log('Turned on');
+                        }
+                    });
+                </code>
+            </pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <img src="assets/homebridge-logo.png" style="height: 100px" />
+                <h2><a href="https://homebridge.io/">Homebridge</a></h2>
+                So if it comes to IoT probably mostly there is Smart Home in the background.
+            </section>
+            <section>
+                <img src="assets/homekit-ecosystem.png" style="height: 200px" />
+                <br />
+                Homebridge allows you to integrate with smart home devices that do not natively support
+                HomeKit without any costs or effort.
+            </section>
+            <section>
+                <h3>How to install homebridge on RPI</h3>
+                <div class="fragment">
+                    Install homebridge globally
+                    <pre data-id="code">
+                <code data-line-numbers class="bash" data-trim>
+                    sudo npm install -g --unsafe-perm homebridge homebridge-config-ui-x
+                </code>
+            </pre>
+                </div>
+                <div class="fragment">
+                    Setup homebridge as a service that will start on boot
+                    <pre data-id="code">
+                <code data-line-numbers class="bash" data-trim>
+                    sudo hb-service install --user homebridge
+                </code>
+            </pre>
+                </div>
+                <small class="fragment">
+                    Login to the web interface by going to http://{ip address of your server}:8581.
+                </small>
+            </section>
+            <section>
+                <h3>Recommended plugins for presentation context</h3>
+                <ul>
+                    <li class="fragment">
+                        <a href="https://github.com/arachnetech/homebridge-mqttthing">
+                            Homebridge MQTT-Thing
+                        </a>
+                    </li>
+                    <li class="fragment">
+                        <a href="https://github.com/ebaauw/homebridge-rpi">Homebridge RPi</a>
+                    </li>
+                </ul>
+                <p class="fragment">
+                    There are over 2,000 Homebridge plugins supporting thousands of different smart
+                    accessories. <br />Also you can create your own plugin!
+                </p>
+            </section>
+        </section>
+        <section>
+            <h2>Additional helpful sites</h2>
+            <ul>
+                <li><a href="https://forbot.pl/blog/">Forbot blog</a></li>
+                <li><a href="https://botland.com.pl/">Botland shop</a></li>
+                <li>
+                    <a href="https://docs.nestjs.com/microservices/mqtt">
+                        Nest.js MQTT microservice module
+                    </a>
+                </li>
+                <li>
+                    <a href="https://nodered.org/">Node-RED</a>
+                    - Online and drag&drop service for wiring together hardware devices
+                </li>
+            </ul>
+        </section>
+        <section style="text-align: left">
+            <h1>THE END</h1>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/zoom/zoom.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+	// More info about initialization & config:
+	// - https://revealjs.com/initialization/
+	// - https://revealjs.com/config/
+	Reveal.initialize({
+		hash: true,
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [RevealHighlight, RevealNotes, RevealZoom],
+	});
+</script>
+</body>
+</html>

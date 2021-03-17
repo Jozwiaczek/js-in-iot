@@ -1,1 +1,1 @@
-# js-in-iot
+# JavaScript in IoT - TechTalk
